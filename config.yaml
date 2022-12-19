@@ -10,7 +10,7 @@ model: {
   epochs: 20
 }
 of_test: {
-  num_imgs_per_cls: 20,
+  num_imgs_per_cls: 5,
   do_overfit_test: True,
   batch_size: 4,
   epochs: 200
@@ -21,7 +21,7 @@ ckpts: {
 }
 wandb: {
   wandb_log: True,
-  project: ADS_Thread,
-  entity: rainforestbear,
-  exp_name: of.test.ViT.Cls.head.b4.e200.im20,
+  project: Indic_ADS,
+  entity: indicads,
+  exp_name: of.test.ViT.Cls.head.b4.e200.im5,
 }
