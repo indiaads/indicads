@@ -1,0 +1,27 @@
+data: {
+  data_dir: /ssd_scratch/cvit/amruth.sagar/ads_non_ads/train,
+  reshape_height: 224,
+  reshape_width: 224,
+}
+model: {
+  batch_size: 32,
+  vit_pretrained: google/vit-base-patch16-224-in21k,
+  learning_rate: 0.001,
+  epochs: 20
+}
+of_test: {
+  num_imgs_per_cls: 20,
+  do_overfit_test: True,
+  batch_size: 4,
+  epochs: 200
+}
+ckpts: {
+  ckpt_frequency: 20,
+  ckpt_folder: /scratch/amruth.sagar/ADS
+}
+wandb: {
+  wandb_log: True,
+  project: ADS_Thread,
+  entity: rainforestbear,
+  exp_name: of.test.ViT.Cls.head.b4.e200.im20,
+}
