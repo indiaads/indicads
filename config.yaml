@@ -10,7 +10,7 @@ model: {
   epochs: 20
 }
 of_test: {
-  num_imgs_per_cls: 5,
+  num_imgs_per_cls: 20,
   do_overfit_test: True,
   batch_size: 4,
   epochs: 200
@@ -23,5 +23,5 @@ wandb: {
   wandb_log: True,
   project: Indic_ADS,
   entity: indicads,
-  exp_name: of.test.ViT.Cls.head.b4.e200.im5,
+  exp_name: of.test.ViT.Cls.head.b4.e200.im20,
 }
