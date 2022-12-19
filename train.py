@@ -23,7 +23,7 @@ dataset = AdsNonAds(images_dir=config['data']['data_dir'],
                     img_height=config['data']['reshape_height'],
                     img_width=config['data']['reshape_width'],
                     seed=42,
-                    of_num_imgs=config['of_test']['num_imgs_per_cls'],
+                    of_num_imgs=None,
                     overfit_test=False)
 
 train_dataloader, valid_dataloader = make_train_val_loaders(dataset=dataset,
@@ -61,7 +61,7 @@ for epoch in range(epochs):
     for batch in tqdm(train_dataloader):
         inputs, labels = batch
         inputs, labels = inputs.to(device), labels.to(device)
-
+        
         optimizer.zero_grad()
 
         output = vit_model(inputs)
@@ -77,16 +77,16 @@ for epoch in range(epochs):
         for batch in tqdm(valid_dataloader):
             inputs, labels = batch
             inputs, labels = inputs.to(device), labels.to(device)
-            
+
             output = vit_model(inputs)
             loss = criterion(output, labels)
 
             valid_loss.append(loss.item())
 
     valid_loss = np.mean(valid_loss)
-    
+
     if wandb_log:
-        wandb.log({'loss/train': train_loss, 'loss/val' : valid_loss})
+        wandb.log({'loss/train': train_loss, 'loss/val': valid_loss})
 
     if epoch % config['ckpts']['ckpt_frequency'] == 0:
         save_states = {

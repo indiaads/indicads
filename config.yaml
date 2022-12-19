@@ -5,6 +5,8 @@ data: {
 }
 model: {
   batch_size: 32,
+  train_bs: 32,
+  valid_bs: 8,
   vit_pretrained: google/vit-base-patch16-224-in21k,
   learning_rate: 0.001,
   epochs: 20
@@ -20,8 +22,8 @@ ckpts: {
   ckpt_folder: /scratch/amruth.sagar/ADS
 }
 wandb: {
-  wandb_log: True,
+  wandb_log: False,
   project: Indic_ADS,
   entity: indicads,
-  exp_name: of.test.ViT.Cls.head.b4.e200.im20,
+  exp_name: all.data.ViT.Cls.head.b32.e150.vld=.05tr,
 }
