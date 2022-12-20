@@ -3,9 +3,10 @@ import torch
 import yaml
 
 
-def save_checkpoint(state, is_best, file_folder,
+def save_checkpoint(state, is_best, file_folder, experiment,
                     file_name='checkpoint.pth.tar'):
     """save checkpoint to file"""
+    file_folder = os.path.join(file_folder, experiment)
     if not os.path.exists(file_folder):
         os.mkdir(file_folder)
     torch.save(state, os.path.join(file_folder, file_name))
