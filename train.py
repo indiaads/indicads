@@ -27,7 +27,7 @@ dataset = AdsNonAds(images_dir=config['data']['data_dir'],
                     overfit_test=False)
 
 train_dataloader, valid_dataloader = make_train_val_loaders(dataset=dataset,
-                                                            split=(0.95, 0.05),
+                                                            split=config['data']['train_val_split'],
                                                             train_bs=config['model']['train_bs'],
                                                             valid_bs=config['model']['valid_bs'])
 
@@ -88,7 +88,7 @@ for epoch in range(epochs):
     if wandb_log:
         wandb.log({'loss/train': train_loss, 'loss/val': valid_loss})
 
-    if epoch % config['ckpts']['ckpt_frequency'] == 0:
+    if epoch % config['ckpt']['ckpt_frequency'] == 0:
         save_states = {
             'epoch': epoch,
             'model_state_dict': cls_head.state_dict(),
@@ -96,6 +96,7 @@ for epoch in range(epochs):
         }
         save_checkpoint(state=save_states, is_best=False,
                         file_folder=config['ckpt']['ckpt_folder'],
+                        experiment=config['wandb']['exp_name'],
                         file_name='epoch_{:03d}.pth.tar'.format(epoch)
                         )
         if valid_loss < previous_valid_loss:
@@ -103,6 +104,7 @@ for epoch in range(epochs):
             save_checkpoint(state=save_states,
                             is_best=True,
                             file_folder=config['ckpt']['ckpt_folder'],
+                            experiment=config['wandb']['exp_name'],
                             file_name='epoch_{:03d}.pth.tar'.format(epoch)
                             )
 if wandb_log:
