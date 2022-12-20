@@ -2,6 +2,7 @@ data: {
   data_dir: /ssd_scratch/cvit/amruth.sagar/ads_non_ads/train,
   reshape_height: 224,
   reshape_width: 224,
+  train_val_split: [0.90, 0.10]
 }
 model: {
   batch_size: 32,
@@ -17,13 +18,13 @@ of_test: {
   batch_size: 4,
   epochs: 200
 }
-ckpts: {
+ckpt: {
   ckpt_frequency: 20,
   ckpt_folder: /scratch/amruth.sagar/ADS
 }
 wandb: {
-  wandb_log: False,
+  wandb_log: True,
   project: Indic_ADS,
   entity: indicads,
-  exp_name: all.data.ViT.Cls.head.b32.e150.vld=.05tr,
+  exp_name: all.data.ViT.Cls.head.b32.e150.vld=.10tr,
 }
