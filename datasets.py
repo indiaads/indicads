@@ -4,10 +4,9 @@ import torchvision.transforms as T
 import os
 import random
 import cv2
-import torch.nn.functional as F
-import matplotlib.pyplot as plt
-import numpy as np
-
+import torch.nn.functional as F 
+import torchvision.transforms as T
+import torch
 
 class AdsNonAds(Dataset):
     def __init__(self,
@@ -16,10 +15,12 @@ class AdsNonAds(Dataset):
                  img_width=224,
                  seed=42,
                  of_num_imgs=20,
-                 overfit_test=False):
+                 overfit_test=False,
+                 augment_data=False):
         assert os.path.exists(images_dir)
 
         self.data_dir = images_dir
+        self.augment = augment_data
 
         if overfit_test:
             self.dataset = self.sample_dataset(seed, of_num_imgs)
@@ -36,8 +37,8 @@ class AdsNonAds(Dataset):
             ]) 
 
     def train_dataset(self, seed):
-        ads = glob(self.data_dir+'/ads/*.jpeg')
-        non_ads = glob(self.data_dir+'/non-ads/*.jpeg')
+        ads = glob(self.data_dir+'/ads/*')
+        non_ads = glob(self.data_dir+'/non-ads/*')
 
         data = []
         data += [[x, 1] for x in ads]
@@ -49,8 +50,8 @@ class AdsNonAds(Dataset):
         return data
 
     def sample_dataset(self, seed, num_imgs):
-        ads = glob(self.data_dir+'/ads/*.jpeg')
-        non_ads = glob(self.data_dir+'/non-ads/*.jpeg')
+        ads = glob(self.data_dir+'/ads/*')
+        non_ads = glob(self.data_dir+'/non-ads/*')
 
         random.seed(seed)
 
@@ -76,5 +77,15 @@ class AdsNonAds(Dataset):
             filename,
             flags=cv2.IMREAD_COLOR),
             code=cv2.COLOR_BGR2RGB)
-        
+        if self.augment:
+            transformed_image = self.image_transforms(image) # 3, H, W
+
+            # All the transformation expect the image to be in shape of [...., H, W]
+            rotated_90 = T.functional.rotate(transformed_image, angle=90)
+            rotated_270 = T.functional.rotate(transformed_image, angle=270) 
+            flipped = T.RandomHorizontalFlip(p=1)(transformed_image)
+
+            return_list = [transformed_image, rotated_90, rotated_270, flipped]
+
+            return (return_list, [self.dataset[idx][1]]*len(return_list))
         return (self.image_transforms(image), self.dataset[idx][1])
