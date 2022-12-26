@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-class SimpleClsHead(nn.Module):
+class ConvClsHead(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
         self.cls_head = nn.Sequential(
@@ -19,13 +19,28 @@ class SimpleClsHead(nn.Module):
     def forward(self, x):
         return self.cls_head(x)
 
+class ClassificationHead(nn.Module):
+    def __init__(self, input_dim, num_classes):
+        super().__init__()
+        self.cls_head = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(input_dim, 100),
+            nn.LeakyReLU(),
+            nn.Linear(100, 50),
+            nn.LeakyReLU(),
+            nn.Linear(50,num_classes)
+        )
+    def forward(self, x):
+        return self.cls_head(x)
+
 class VitWithCLShead(nn.Module):
-    def __init__(self, vit_model, cls_head):
+    def __init__(self, vit_model, cls_head, is_vit_trainable=False):
         super().__init__()
         self.vit_model = vit_model
+        if not is_vit_trainable:
+            for param in self.vit_model.parameters():
+                param.requires_grad = False
         self.cls_head = cls_head
     def forward(self, x):
-        hidden_state = self.vit_model(x).last_hidden_state
-        # (batch, x, y) to (batch, channels=1, x, y) for conv2d in cls_head
-        hidden_state.unsqueeze_(1)
-        return self.cls_head(hidden_state)
+        cls_token = self.vit_model(x).pooler_output
+        return self.cls_head(cls_token)
