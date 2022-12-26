@@ -8,20 +8,22 @@ data: {
 }
 model: {
   batch_size: 32,
-  train_bs: 8,  # the batch size will be 4 times this
+  train_bs: 32,
   valid_bs: 8,
   vit_pretrained: google/vit-base-patch16-224-in21k,
   learning_rate: 0.001,
-  epochs: 50,
+  epochs: 100,
   vit_feature_dim: 768
 }
-ckpt: {
-  ckpt_frequency: 10,
-  ckpt_folder: /scratch/amruth.sagar/ADS
+of_test: {
+  num_imgs_per_cls: 10,
+  do_overfit_test: True,
+  batch_size: 4,
+  epochs: 150
 }
 wandb: {
   wandb_log: True,
   project: Indic_ADS,
   entity: indicads,
-  exp_name: 6k.data.aug.ViT.frz.Cls.head.b32.e50.vld=.05tr,
+  exp_name: of.test.ViT.frz.Cls.head.b4.e150.im10
 }
