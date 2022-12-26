@@ -2,13 +2,12 @@ import os
 import torch
 import yaml
 
-
 def save_checkpoint(state, is_best, file_folder, experiment,
                     file_name='checkpoint.pth.tar'):
     """save checkpoint to file"""
+
     file_folder = os.path.join(file_folder, experiment)
-    if not os.path.exists(file_folder):
-        os.mkdir(file_folder)
+    os.makedirs(file_folder, exist_ok=True)
     torch.save(state, os.path.join(file_folder, file_name))
     if is_best:
         # skip the optimization / scheduler state
