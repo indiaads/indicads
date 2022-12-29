@@ -20,7 +20,7 @@ class ConvClsHead(nn.Module):
         return self.cls_head(x)
 
 class ClassificationHead(nn.Module):
-    def __init__(self, input_dim, num_classes):
+    def __init__(self, input_dim, num_classes, dropout_prob):
         super().__init__()
 
         # Dropout layers after activation.
@@ -28,10 +28,10 @@ class ClassificationHead(nn.Module):
             nn.Flatten(),
             nn.Linear(input_dim, 100),
             nn.LeakyReLU(),
-            nn.Dropout(p=0.2),
+            nn.Dropout(p=dropout_prob),
             nn.Linear(100, 50),
             nn.LeakyReLU(),
-            nn.Dropout(p=0.2),
+            nn.Dropout(p=dropout_prob),
             nn.Linear(50,num_classes)
         )
     def forward(self, x):

@@ -67,7 +67,8 @@ valid_dataloader = make_data_loader(dataset=valid_dataset,
 pretrained_model = ViTModel.from_pretrained(config['model']['vit_pretrained'])
 
 cls_head = ClassificationHead(
-    input_dim=config['model']['vit_feature_dim'], num_classes=2)
+    input_dim=config['model']['vit_feature_dim'], num_classes=2, 
+    dropout_prob=config['model']['cls_head_dropout_p'])
 
 vit_model = VitWithCLShead(pretrained_model, cls_head,
                            is_vit_trainable=config['model']['is_vit_trainable'])
