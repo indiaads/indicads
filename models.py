@@ -22,12 +22,16 @@ class ConvClsHead(nn.Module):
 class ClassificationHead(nn.Module):
     def __init__(self, input_dim, num_classes):
         super().__init__()
+
+        # Dropout layers after activation.
         self.cls_head = nn.Sequential(
             nn.Flatten(),
             nn.Linear(input_dim, 100),
             nn.LeakyReLU(),
+            nn.Dropout(p=0.2),
             nn.Linear(100, 50),
             nn.LeakyReLU(),
+            nn.Dropout(p=0.2),
             nn.Linear(50,num_classes)
         )
     def forward(self, x):
@@ -41,6 +45,8 @@ class VitWithCLShead(nn.Module):
             for param in self.vit_model.parameters():
                 param.requires_grad = False
         self.cls_head = cls_head
+    def trainable_parameters(self):
+        return [param for param in self.parameters() if param.requires_grad]
     def forward(self, x):
         cls_token = self.vit_model(x).pooler_output
         return self.cls_head(cls_token)
