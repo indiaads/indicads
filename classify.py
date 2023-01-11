@@ -98,7 +98,7 @@ argument_parser.add_argument(
 
 arguments = argument_parser.parse_args()
 
-
+assert '.pkl' or '.pickle' in arguments.pred_out, "Include .pkl while giving the filename in --pred_out"
 # The below variable tells what should be used as the feature extractor,
 # like vit, or convnext etc. It is specified in config file.
 feat_ext_name = config['model']['feat_extractor']
