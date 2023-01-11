@@ -7,4 +7,4 @@ classify.py --dataset <path of dir with images> --ckpt_path <path of the ckpt fi
 ```
 > NOTE: give a file name along with the .pkl or .pickle extension for --pred_out
 
-Running the above script generate a .pkl file, which contains all filenames of the images, and the class label predicted. 1 for ads, and 0 for non-ads.
+Running the above script generate a .pkl file of a list of tuples, (image_filename, class_predicted).
